@@ -3,7 +3,9 @@
 var Promise     = require('bluebird'),
     errors      = require('./errors'),
     config      = require('./config'),
-    logger      = require('./logger');
+    logger      = require('./logger'),
+    socketio    = require('./sockets'),
+    redisClient = require('./redis');
 
 function AuctionServer(auctionApp) {
   this.auctionApp = auctionApp;
@@ -24,6 +26,8 @@ AuctionServer.prototype.start = function () {
         config.server.port,
         config.server.host
       );
+      // Init socket
+      socketio(self.httpServer, redisClient);
     }
 
     self.httpServer.on('error', function (error) {

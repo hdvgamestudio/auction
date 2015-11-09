@@ -70,6 +70,9 @@ module.exports = function (grunt) {
     mochaTest: {
       unit: {
         src: ['core/test/unit/**/*_spec.js']
+      },
+      integration: {
+        src: ['core/test/integration/**/*_spec.js']
       }
     }
   });

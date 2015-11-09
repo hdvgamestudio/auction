@@ -5,10 +5,7 @@ var express = require('express'),
 apiRoutes = function (middleware) {
   var router = express.Router();
 
-  router.use(function (req, res, next) {
-    console.log('Only run with api middleware');
-    next();
-  });
+  router.use(middleware.resourceSeperation);
 
   router.get('/', function (req, res, next) {
     res.end('Hello auction APIs');

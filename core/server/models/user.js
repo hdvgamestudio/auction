@@ -16,9 +16,9 @@ oAuthTypes = [
  */
 
 UserSchema = new Schema({
-  name: {type: String, default: ''},
-  email: {type: String, default: ''},
   username: {type: String, default: ''},
+  email: {type: String, default: ''},
+  display_name: {type: String, default: ''},
   avatar: {type: String},
   genre: {type: String},
   birthday: {type: String},

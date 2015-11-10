@@ -69,15 +69,9 @@ errors = {
     return {errors: errors, statusCode: statusCode};
   },
 
-  handleAPIError: function (error, permsMessage) {
+  handleAPIError: function (error) {
     if (!error) {
-      return this.rejectError(
-        new this.NoPermissionError(permsMessage || 'You do not have permission to perform this action')
-      );
-    }
-
-    if (_.isString(error)) {
-      return this.rejectError(new this.NoPermissionError(error));
+      return this.rejectError(new this.InternalServerError(error));
     }
 
     if (error.errorType) {

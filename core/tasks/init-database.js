@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-  grunt.config({});
+  // Config: grunt.config({});
 
   // Initiate data for mongo db
   grunt.registerTask('initDB', 'initiate mongo database', function () {

@@ -8,6 +8,7 @@ var path          = require('path'),
 
 defaults = {
   auctionVersion:         packageInfo.version,
+  appRoot:                appRoot,
   config:                 path.join(appRoot, 'config.js'),
   configExample:          path.join(appRoot, 'config.example.js'),
   corePath:               corePath,

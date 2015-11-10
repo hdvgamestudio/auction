@@ -1,5 +1,29 @@
 module.exports = function (grunt) {
   grunt.initConfig({
+    watch: {
+      express: {
+        files: ['core/auction-server.js', 'core/server/**/*.js'],
+        tasks: ['express:dev'],
+        options: {
+          spawn: false
+        }
+      }
+    },
+
+    express: {
+      options: {
+        script: 'index.js',
+        output: 'Auction server is running'
+      },
+      dev: {},
+      prod: {},
+      test: {
+        options: {
+          node_env: 'testing'
+        }
+      }
+    },
+
     jshint: {
       options: {
         jshintrc: true
@@ -83,17 +107,36 @@ module.exports = function (grunt) {
   // Load all grunt tasks matching the ['grunt-*', '@*/grunt-*'] patterns
   require('load-grunt-tasks')(grunt);
 
-  // Default task.
-  grunt.registerTask('default', ['lint', 'mochaTest']);
+  // `grunt validate` is called by `npm test` and is used by Travis.
+  grunt.registerTask('validate', 'Run tests and lint code',
+    ['init', 'lint', 'test-all']);
 
   // Linting
   grunt.registerTask('lint', ['jshint', 'jscs']);
 
-  // Init environment for development
-  grunt.registerTask('init', 'Prepare the project for development',
-  ['default']);
+  // Test setup
+  grunt.registerTask('test-setup', 'Setup ready to run test',
+    ['setTestEnv']
+  );
 
-  // Task to be run when releasing a new version
+  // Test all
+  grunt.registerTask('test-all', 'Run tests and lint code',
+    ['test-unit', 'test-integration']);
+
+  // Test unit
+  grunt.registerTask('test-unit', 'Run unit tests (mocha)',
+    ['test-setup', 'mochaTest:unit']
+  );
+
+  // Test integration
+  grunt.registerTask('test-integration', 'Run integration tests (mocha)',
+    ['test-setup', 'mochaTest:integration']
+  );
+  // Init environment for development
+  grunt.registerTask('init', 'Prepare the project for development', function () {
+  });
+
+  // Task to be executed when releasing a new version
   grunt.registerTask('release', [
     'init'
   ]);

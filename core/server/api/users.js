@@ -1,4 +1,6 @@
-var models = require('../models');
+var Promise = require('bluebird'),
+    models = require('../models'),
+    errors = require('../errors');
 
 module.exports = {
 
@@ -31,10 +33,19 @@ module.exports = {
       .exec();
   },
 
-  create: function (object, options) {
+  create: function (user, options) {
+    models.User.findOne(user).then(function (result) {
+      if (result) {
+        return new errors.BadRequestError('User\'s email already existed');
+      } else {
+        return models.User.save(user);
+      }
+    }).catch(function (err) {
+      Promise.reject(err);
+    });
   },
 
-  edit: function (object, options) {
+  edit: function (user, options) {
   },
 
   show: function (options) {

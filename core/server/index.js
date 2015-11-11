@@ -1,21 +1,25 @@
 var express                = require('express'),
-    config                 = require('./config'),
     mongoose               = require('mongoose'),
+    config                 = require('./config'),
+    db                     = require('./db'),
     logger                 = require('./logger'),
     middleware             = require('./middleware'),
     AuctionServer          = require('./auction-server');
 
-function connectDb() {
-  var options = {server: {socketOptions: {keepAlive: 1}}};
-  mongoose.connect(config.mongoDb.connection, options);
-  mongoose.connection.on('error', function (err) {
-  });
-  mongoose.connection.on('disconnected', function (err) {
-  });
-}
-
 function getInstance() {
+  // Load config
+  logger.debug('Loading config');
+  config.load(config.configPath);
+
+  // Connect mongodb
+  logger.debug('Connecting to mongoDB');
+  db.connect();
+
+  // Create express instance
+  logger.debug('Initiating express app');
   var auctionApp = express();
+
+  // Set middleware
   middleware(auctionApp);
   return new AuctionServer(auctionApp);
 }

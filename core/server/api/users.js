@@ -34,14 +34,15 @@ module.exports = {
   },
 
   create: function (user, options) {
-    models.User.findOne(user).then(function (result) {
+    return models.User.findOne({email: user.email}).then(function (result) {
       if (result) {
-        return new errors.BadRequestError('User\'s email already existed');
+        return Promise.reject(new errors.BadRequestError('User\'s email already existed'));
       } else {
-        return models.User.save(user);
+        var dbUser = new models.User(user);
+        return dbUser.save();
       }
     }).catch(function (err) {
-      Promise.reject(err);
+      return Promise.reject(err);
     });
   },
 

@@ -116,7 +116,7 @@ module.exports = function (grunt) {
 
   // Test setup
   grunt.registerTask('test-setup', 'Setup ready to run test',
-    ['setTestEnv']
+    ['loadConfig', 'setTestEnv']
   );
 
   // Test all
@@ -125,12 +125,12 @@ module.exports = function (grunt) {
 
   // Test unit
   grunt.registerTask('test-unit', 'Run unit tests (mocha)',
-    ['test-setup', 'mochaTest:unit']
+    ['test-setup', 'mochaTest:unit', 'cleanTest']
   );
 
   // Test integration
   grunt.registerTask('test-integration', 'Run integration tests (mocha)',
-    ['test-setup', 'mochaTest:integration']
+    ['test-setup', 'mochaTest:integration', 'cleanTest']
   );
   // Init environment for development
   grunt.registerTask('init', 'Prepare the project for development', function () {

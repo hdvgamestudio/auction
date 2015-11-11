@@ -41,8 +41,6 @@ module.exports = {
         var dbUser = new models.User(user);
         return dbUser.save();
       }
-    }).catch(function (err) {
-      return Promise.reject(err);
     });
   },
 

@@ -1,16 +1,18 @@
 var path          = require('path'),
     _             = require('lodash'),
+    mongoose      = require('mongoose'),
     packageInfo   = require('../../../package.json'),
     appRoot       = path.resolve(__dirname, '../../../'),
     corePath      = path.resolve(appRoot, 'core/'),
-    defaults,
-    envConfig;
+    mongooseInstance,
+    envConfig,
+    defaults;
 
 defaults = {
   auctionVersion:         packageInfo.version,
   appRoot:                appRoot,
-  config:                 path.join(appRoot, 'config.js'),
-  configExample:          path.join(appRoot, 'config.example.js'),
+  configPath:             path.join(appRoot, 'config.js'),
+  configExamplePath:      path.join(appRoot, 'config.example.js'),
   corePath:               corePath,
   logDir:                 path.join(appRoot, '/logs/'),
   clientAssets:           path.join(corePath, '/built/assets/'),
@@ -25,8 +27,28 @@ defaults = {
   }
 };
 
-// Load config file based on ENV
-envConfig = require(path.join(appRoot, 'config.js'))[process.env.NODE_ENV || 'development'];
+function ConfigManager(config) {
+  this._config = {};
 
-// Export config file merged
-module.exports = _.merge(envConfig, defaults);
+  if (config && _.isObject(config)) {
+    this.set(config);
+  }
+}
+
+ConfigManager.prototype.set = function (config) {
+  _.merge(this._config, config);
+  _.extend(this, this._config);
+};
+
+ConfigManager.prototype.get = function () {
+  return this._config;
+};
+
+ConfigManager.prototype.load = function (configFilePath) {
+  // Load config file based on ENV
+  envConfig = require(configFilePath)[process.env.NODE_ENV || 'development'];
+  this.set(envConfig);
+};
+
+// Export config object
+module.exports = new ConfigManager(defaults);

@@ -1,7 +1,0 @@
-{
-  dbSettings: {
-    host: 'localhost',
-    db: 'migration',
-    port: 27017
-  }
-}

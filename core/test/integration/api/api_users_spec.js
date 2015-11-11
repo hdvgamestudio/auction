@@ -35,7 +35,9 @@ describe('User APIs', function () {
         authToken: '',
         password: '123456'
       };
-      done();
+      UserAPI.create(localUser).then(function (result) {
+        done();
+      }).catch(done);
     });
     it('a facebook user, should return corresponding user', function () {
     });

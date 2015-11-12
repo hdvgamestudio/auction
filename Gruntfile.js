@@ -132,6 +132,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test-integration', 'Run integration tests (mocha)',
     ['test-setup', 'mochaTest:integration', 'cleanTest']
   );
+
   // Init environment for development
   grunt.registerTask('init', 'Prepare the project for development', function () {
   });

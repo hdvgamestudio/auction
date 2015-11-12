@@ -24,10 +24,12 @@ UserSchema = new Schema({
   _id: {type: String, default: uuid.v1},
   username: {type: String, default: ''},
   email: {type: String, default: ''},
-  display_name: {type: String, default: ''},
-  avatar: {type: String},
+  last_name: {type: String, default: ''},
+  first_name: {type: String, default: ''},
+  avatar_url: {type: String},
   genre: {type: String},
   birthday: {type: String},
+  phone: {type: String},
   provider: {type: String, default: ''}, // 'local', 'facebook', 'twitter', 'google'
   authToken: {type: String, default: ''},
   password: {type: String},
@@ -37,6 +39,8 @@ UserSchema = new Schema({
   twitter: {},
   google: {}
 });
+
+UserSchema.index({_id: 1}, {unique: true});
 
 /**
  * Pre-save hook

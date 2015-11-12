@@ -23,7 +23,7 @@ describe('User APIs', function () {
   });
   describe('Create', function () {
     // Local user
-    it('a local user, should return corresponding user', function (done) {
+    it('a local user, should return corresponding user', function () {
       var localUser = {
         username: 'localUser',
         email: 'localUser@auction.com',
@@ -35,9 +35,6 @@ describe('User APIs', function () {
         authToken: '',
         password: '123456'
       };
-      UserAPI.create(localUser).then(function (result) {
-        done();
-      }).catch(done);
     });
     it('a facebook user, should return corresponding user', function () {
     });

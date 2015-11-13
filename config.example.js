@@ -1,4 +1,4 @@
-// # Ghost Configuration
+// # Auction Configuration
 
 var path = require('path'),
   config;

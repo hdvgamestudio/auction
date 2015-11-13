@@ -30,14 +30,13 @@ UserSchema = new Schema({
   genre: {type: String},
   birthday: {type: String},
   phone: {type: String},
+  address: {type: String},
   provider: {type: String, default: ''}, // 'local', 'facebook', 'twitter', 'google'
-  authToken: {type: String, default: ''},
+  access_token: {type: String, default: ''},
+  social_account_id: {type: String, default: ''},
   password: {type: String},
   created_at: {type: Date, default: Date.now},
-  modified_at: {type: Date},
-  facebook: {},
-  twitter: {},
-  google: {}
+  modified_at: {type: Date}
 });
 
 UserSchema.index({_id: 1}, {unique: true});
@@ -50,7 +49,6 @@ UserSchema.index({_id: 1}, {unique: true});
 UserSchema.pre('save', function (next) {
   var self = this;
 
-  self.created_at = moment.utc().format(utils.utcFormat);
   // Only hash the password if it has been modified (or is new)
   if (!self.isModified('password')) {
     return next();

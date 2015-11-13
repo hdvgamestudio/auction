@@ -1,6 +1,7 @@
-var api = require('./api');
+var api = require('./api'),
+    config = require('../config');
 
 module.exports = {
-  apiBaseUri: '/auction/api/v1/',
+  apiBaseUri: config.apiBaseUri,
   api: api
 };

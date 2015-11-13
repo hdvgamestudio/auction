@@ -14,6 +14,7 @@ defaults = {
   configPath:             path.join(appRoot, 'config.js'),
   configExamplePath:      path.join(appRoot, 'config.example.js'),
   corePath:               corePath,
+  apiBaseUri:             '/auction/api/v1',
   logDir:                 path.join(appRoot, '/logs/'),
   clientAssets:           path.join(corePath, '/built/assets/'),
   jwt: {

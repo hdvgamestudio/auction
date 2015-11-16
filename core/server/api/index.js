@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    validate = require('../request-schemas'),
+    validate = require('../request-schemas').validate,
     users = require('./users'),
     errors = require('../errors'),
     http;

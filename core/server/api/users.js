@@ -1,6 +1,7 @@
 var Promise = require('bluebird'),
-    models = require('../models'),
-    errors = require('../errors');
+    _       = require('lodash'),
+    models  = require('../models'),
+    errors  = require('../errors');
 
 module.exports = {
 
@@ -16,20 +17,38 @@ module.exports = {
    * @returns {Promise<Users>} Users Collection with Meta
    */
   get: function (options) {
-    // Validate
+    /**
+     * @param {{options}}
+     */
     options = options || {};
-    options.extra = options.extra || {};
 
-    var criteria = options.criteria || {},
-        filter = options.filter || {},
-        sort = options.extra.sort || {},
-        skip = options.extra.skip || 0,
-        limit = options.extra.limit || null;
+    var criteria = {},
+        fields,
+        sort = {},
+        page = options.page || 0,
+        perpage = options.perpage || null,
+        expr;
 
-    return models.User.find(criteria, filter)
+    if (options.fields) {
+      fields = options.fields.replace(/,/g, ' ');
+    }
+
+    if (options.q) {
+      expr = new RegExp('.*' + options.q + '.*');
+      criteria.$or = [
+        {name: expr},
+        {email: expr}
+      ];
+    }
+
+    if (options.sort) {
+      sort = options.sort.replace(/,/g, ' ');
+    }
+
+    return models.User.find(criteria, fields)
       .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .skip((page - 1) * perpage)
+      .limit(perpage)
       .exec();
   },
 
@@ -45,11 +64,28 @@ module.exports = {
   },
 
   edit: function (user, options) {
+    // If email existed
+    return models.User.findOne({email: user.email, _id: {$ne: options.id}}).then(function (result) {
+      if (result) {
+        return Promise.reject(new errors.BadRequestError('User\'s email already existed'));
+      } else {
+        return models.User.findOne({_id: options.id});
+      }
+    }).then(function (updatedUser) {
+      if (!updatedUser) {
+        return Promise.reject(new errors.BadRequestError('User doesn\'t existed'));
+      }
+      _.merge(updatedUser, user);
+      return updatedUser.save();
+    });
   },
 
   show: function (options) {
   },
 
   delete: function (options) {
+    return models.User.remove({_id: options.id}).then(function (result) {
+      return result.result.n;
+    });
   }
 };
